@@ -396,6 +396,10 @@ for (name, parameters) in operations:
             os.unlink(f"./srdr_work/stems/{stem}_2.wav")
             os.rename(f"./srdr_work/channels/{channel}_2.wav", f"./srdr_work/channels/{channel}.wav")
         case "Dis":
+            if version == "1.0":
+                print(f"This Scene file does not support the Dis instruction.")
+                exit(2)
+
             if len(parameters) != 2:
                 print(f"Expected 2 parameters but got {len(parameters)}.")
                 exit(2)
