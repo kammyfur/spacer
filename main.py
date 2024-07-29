@@ -89,11 +89,15 @@ if len(streams) > 1:
     exit(1)
 
 source = streams[0]
-print(f"Input: {source['codec_long_name']}, "
-      f"{int(source['sample_rate']) / 1000} kHz, "
-      f"{source['bits_per_sample']} bit, "
-      f"{int(source['bit_rate']) / 1000} kbps, "
-      f"{source['duration']} seconds")
+if 'bit_rate' in source:
+    print(f"Input: {source['codec_long_name']}, "
+          f"{int(source['sample_rate']) / 1000} kHz, "
+          f"{int(source['bit_rate']) / 1000} kbps, "
+          f"{source['duration']} seconds")
+else:
+    print(f"Input: {source['codec_long_name']}, "
+          f"{int(source['sample_rate']) / 1000} kHz, "
+          f"{source['duration']} seconds")
 
 for (name, parameters) in operations:
     match name:
