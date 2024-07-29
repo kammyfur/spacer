@@ -425,12 +425,7 @@ for (name, parameters) in operations:
             subprocess.run(args, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
             if layout is not None:
-                audio_filter = ""
-
-                for i in range(channels):
-                    audio_filter += f"[{i}:a]"
-
-                audio_filter += "join=inputs=1:channel_layout="
+                audio_filter = "join=inputs=1:channel_layout="
 
                 for channel in layout:
                     audio_filter += f"{channel}+"
@@ -438,7 +433,7 @@ for (name, parameters) in operations:
                 audio_filter = audio_filter[:-1]
                 subprocess.run([
                     "ffmpeg",
-                    "-y"
+                    "-y",
                     "-i", "./srdr_work/output.wav",
                     "-filter_complex", audio_filter,
                     "./srdr_work/output_2.wav"
