@@ -4,7 +4,6 @@ from constants import *
 import shutil
 import subprocess
 import json
-import demucs.separate
 
 parser = argparse.ArgumentParser(
     prog='surrounder',
@@ -20,6 +19,10 @@ args = _args = parser.parse_args()
 if not os.path.exists(args.input):
     print(f'Input file {args.input} not found')
     exit(1)
+
+if os.path.isdir(args.input):
+    print(f"Notice: {args.input} is a directory, using the first file in this directory as the reference input.")
+    args.input = list(os.scandir(args.input))[0].path
 
 if not os.path.exists(args.scene):
     print(f'Scene file {args.scene} not found')
@@ -102,6 +105,10 @@ else:
 for (name, parameters) in operations:
     match name:
         case "Chs":
+            if len(parameters) != 3:
+                print(f"Expected 3 parameters but got {len(parameters)}.")
+                exit(2)
+
             try:
                 channels = int(parameters[0])
 
@@ -168,6 +175,10 @@ for (name, parameters) in operations:
                     f"./srdr_work/channels/{i}.wav"
                 ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         case "Sep":
+            if len(parameters) != 1:
+                print(f"Expected 1 parameter but got {len(parameters)}.")
+                exit(2)
+
             if not os.path.exists(f"./srdr_work/input.wav"):
                 print(f"Separation is not ready: not configured.")
                 exit(2)
@@ -180,7 +191,15 @@ for (name, parameters) in operations:
                 print(f"Invalid stem format value: {parameters[0]}")
                 exit(2)
 
-            if stem_format != 0:
+            if stem_format == -2:
+                if not os.path.exists(f"./stems"):
+                    print("Could not find stems in a 'stems' folder.")
+                    exit(2)
+
+                shutil.copytree(f"./stems", f"./srdr_work/stems")
+            elif stem_format == -1:
+                pass
+            elif stem_format != 0:
                 match stem_format:
                     case 1:
                         print("Isolating vocals")
@@ -206,11 +225,26 @@ for (name, parameters) in operations:
 
             args += ["./srdr_work/input.wav"]
 
-            print("Separating, this might take a while.")
-            demucs.separate.main(args)
-
-            os.rename("./srdr_work/stems_tmp/htdemucs_6s/input", "./srdr_work/stems")
-            shutil.rmtree('./srdr_work/stems_tmp')
+            if stem_format > -1:
+                import demucs.separate
+                print("Separating using machine learning, this might take a while.")
+                demucs.separate.main(args)
+                os.rename("./srdr_work/stems_tmp/htdemucs_6s/input", "./srdr_work/stems")
+                shutil.rmtree('./srdr_work/stems_tmp')
+            elif stem_format == -1:
+                os.mkdir("./srdr_work/stems")
+                subprocess.run([
+                    "sox",
+                    "./srdr_work/input.wav",
+                    "./srdr_work/stems/other.wav"
+                ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                subprocess.run([
+                    "sox",
+                    "./srdr_work/input.wav",
+                    "./srdr_work/stems/vocals.wav",
+                    "highpass", "300",
+                    "lowpass", "3500"
+                ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
             if os.path.exists("./srdr_work/stems/vocals.wav"):
                 os.rename("./srdr_work/stems/vocals.wav", "./srdr_work/stems/1.wav")
@@ -302,6 +336,10 @@ for (name, parameters) in operations:
                 "./srdr_work/stems/21.wav"
             ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         case "Map":
+            if len(parameters) != 3:
+                print(f"Expected 3 parameters but got {len(parameters)}.")
+                exit(2)
+
             try:
                 stem = int(parameters[0])
             except ValueError:
@@ -357,6 +395,69 @@ for (name, parameters) in operations:
             os.unlink(f"./srdr_work/channels/{channel}.wav")
             os.unlink(f"./srdr_work/stems/{stem}_2.wav")
             os.rename(f"./srdr_work/channels/{channel}_2.wav", f"./srdr_work/channels/{channel}.wav")
+        case "Dis":
+            if len(parameters) != 2:
+                print(f"Expected 2 parameters but got {len(parameters)}.")
+                exit(2)
+
+            try:
+                channel1 = int(parameters[0])
+            except ValueError:
+                print(f"Invalid channel value: {parameters[0]}")
+                exit(2)
+
+            try:
+                channel2 = int(parameters[1])
+            except ValueError:
+                print(f"Invalid channel value: {parameters[1]}")
+                exit(2)
+
+            if not os.path.exists(f"./srdr_work/channels/{channel1}.wav"):
+                print(f"Invalid or nonexistent channel: {channel1}")
+                exit(2)
+
+            if not os.path.exists(f"./srdr_work/channels/{channel2}.wav"):
+                print(f"Invalid or nonexistent channel: {channel2}")
+                exit(2)
+
+            if layout is not None:
+                print(f"Distance: Channel {channel1} ({layout[channel1]}) <-> Channel {channel2} ({layout[channel2]})")
+            else:
+                print(f"Distance: Channel {channel1} <-> Channel {channel2}")
+
+            subprocess.run([
+                "sox",
+                "-M",
+                f"./srdr_work/channels/{channel1}.wav",
+                f"./srdr_work/channels/{channel2}.wav",
+                f"./srdr_work/channels/_2.wav",
+            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+            subprocess.run([
+                "sox",
+                f"./srdr_work/channels/_2.wav",
+                f"./srdr_work/channels/_3.wav",
+                "remix", "1v-0.8718,2v0.4898", "1v0.4898,2v-0.8718",
+                "delay", "0.15"
+            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+            subprocess.run([
+                "ffmpeg",
+                "-y",
+                "-i", "./srdr_work/channels/_3.wav",
+                "-filter_complex", "[0:0]pan=1|c0=c0[left];[0:0]pan=1|c0=c1[right]",
+                "-map", "[left]",
+                f"./srdr_work/channels/{channel1}_2.wav",
+                "-map", "[right]",
+                f"./srdr_work/channels/{channel2}_2.wav",
+            ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+            os.unlink(f"./srdr_work/channels/{channel1}.wav")
+            os.unlink(f"./srdr_work/channels/{channel2}.wav")
+            os.unlink(f"./srdr_work/channels/_2.wav")
+            os.unlink(f"./srdr_work/channels/_3.wav")
+            os.rename(f"./srdr_work/channels/{channel1}_2.wav", f"./srdr_work/channels/{channel1}.wav")
+            os.rename(f"./srdr_work/channels/{channel2}_2.wav", f"./srdr_work/channels/{channel2}.wav")
         case "Lay":
             layout = parameters
 
@@ -367,6 +468,10 @@ for (name, parameters) in operations:
 
             print(f"Channel layout: {', '.join(layout)}")
         case "Out":
+            if len(parameters) != 1:
+                print(f"Expected 1 parameter but got {len(parameters)}.")
+                exit(2)
+
             if not os.path.exists(f"./srdr_work/input.wav"):
                 print(f"Output is not ready: not configured.")
                 exit(2)

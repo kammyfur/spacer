@@ -12,7 +12,8 @@ def value_to_constant(value, filter_str=None):
     return keys[0]
 
 Versions = [
-    "1.0"
+    "1.0",
+    "1.1"
 ]
 
 Channels = [
@@ -122,6 +123,8 @@ Constants = {
     'LAYOUT_ATMOS_11_1_4': 'FL; FR; FC; LFE; BL; BR; FLC; FRC; BC; SL; SR; TBL; TBR',
 
     # Stem configurations
+    'STEMS_MANUAL': -2,  # Supported for Sep
+    'STEMS_SIMPLE': -1,  # Supported for Sep
     'STEMS_ALL': 0,  # Supported for Sep
     'STEMS_VOCALS': 1,  # Supported for Sep
     'STEMS_BASS': 2,  # Supported for Sep
