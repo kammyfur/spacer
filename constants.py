@@ -11,9 +11,12 @@ def value_to_constant(value, filter_str=None):
 
     return keys[0]
 
+Version = "0.3.0"
+
 Versions = [
     "1.0",
-    "1.1"
+    "1.1",
+    "1.2"
 ]
 
 Channels = [
@@ -154,5 +157,15 @@ Constants = {
     'OUTPUT_AC3': 2,
     'OUTPUT_EAC3': 3,
     'OUTPUT_AC4': 4,
-    'OUTPUT_AAC': 5
+    'OUTPUT_AAC': 5,
+
+    # AI models
+    'MODEL_LEGACY': "htdemucs_6s",
+    'MODEL_STANDARD': "htdemucs",
+    'MODEL_STANDARD_LG': "htdemucs_ft",
+    'MODEL_STANDARD_XL': "htdemucs_mmi",
+    'MODEL_DEFAULT': "mdx_extra",
+    'MODEL_BETTER_MD': "mdx",
+    'MODEL_BETTER_SM': "mdx_extra_q",
+    'MODEL_BETTER_XS': "mdx_q",
 }

@@ -46,11 +46,15 @@ if not lines[0].startswith("%Srdr-"):
     exit(1)
 
 version = lines[0].split("-")[1]
-print(f"Surrounder Scene version: {version}")
 
 if version not in Versions:
     print(f"This version of Surrounder does not support this Scene file. Supported versions: {', '.join(Versions)}")
     exit(1)
+
+if Versions.index(version) == len(Versions) - 1:
+    print(f"Surrounder {Version}, using Scene specification version {version} (native)")
+else:
+    print(f"Surrounder {Version}, using Scene specification version {version} (compatibility)")
 
 operations = []
 
@@ -175,15 +179,26 @@ for (name, parameters) in operations:
                     f"./srdr_work/channels/{i}.wav"
                 ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         case "Sep":
-            if len(parameters) != 1:
-                print(f"Expected 1 parameter but got {len(parameters)}.")
-                exit(2)
+            if version == "1.0" or version == "1.1":
+                if len(parameters) != 1:
+                    print(f"Expected 1 parameter but got {len(parameters)}.")
+                    exit(2)
+            else:
+                if len(parameters) != 2:
+                    print(f"Expected 2 parameters but got {len(parameters)}.")
+                    exit(2)
 
             if not os.path.exists(f"./srdr_work/input.wav"):
                 print(f"Separation is not ready: not configured.")
                 exit(2)
 
-            args = ["--float32", "-n", "htdemucs_6s", "-o", "./srdr_work/stems_tmp"]
+            model = "htdemucs_6s"
+
+            if version != "1.0" and version != "1.1":
+                model = parameters[1]
+
+            print(f"Using model {model}")
+            args = ["--float32", "-n", model, "-o", "./srdr_work/stems_tmp"]
 
             try:
                 stem_format = int(parameters[0])
@@ -229,7 +244,7 @@ for (name, parameters) in operations:
                 import demucs.separate
                 print("Separating using machine learning, this might take a while.")
                 demucs.separate.main(args)
-                os.rename("./srdr_work/stems_tmp/htdemucs_6s/input", "./srdr_work/stems")
+                os.rename(f"./srdr_work/stems_tmp/{model}/input", "./srdr_work/stems")
                 shutil.rmtree('./srdr_work/stems_tmp')
             elif stem_format == -1:
                 os.mkdir("./srdr_work/stems")
