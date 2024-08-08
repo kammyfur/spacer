@@ -9,13 +9,17 @@
 '
 
 ' Base configuration
-Chs: CHANNELS_5_1; 16; 44100
-Lay: LAYOUT_5_1
+Chs: CHANNELS_7_1; 16; 44100
+Lay: LAYOUT_7_1
 
 ' Splitting into stems
-Sep: STEMS_ALL; MODEL_DEFAULT
+Sep: STEMS_ALL; MODEL_LEGACY
 
 ' Original version of the song in the front channels
+Map: STEMS_PIANO_L; 0; 1
+Map: STEMS_PIANO_R; 1; 1
+Map: STEMS_GUITAR_L; 6; 1
+Map: STEMS_GUITAR_R; 7; 1
 Map: STEMS_BASS_L; 5; 1.3
 Map: STEMS_BASS_R; 4; 1.3
 Map: STEMS_DRUMS_L; 4; 0.6
