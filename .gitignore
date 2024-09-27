@@ -1,6 +1,6 @@
 .venv
-test.m4a
 separated
 srdr_work
 __pycache__
 stems
+test*
