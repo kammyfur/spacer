@@ -11,7 +11,7 @@ def value_to_constant(value, filter_str=None):
 
     return keys[0]
 
-Version = "1.0.0-rc.1"
+Version = "1.0.0-rc.2"
 
 Versions = [
     "1.0",
