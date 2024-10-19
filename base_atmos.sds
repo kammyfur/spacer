@@ -1,0 +1,50 @@
+%Srdr-1.3
+
+'
+' Surrounder Dolby Atmos scene file
+'
+' This is the scene file tested for Atmos during development
+' of Surrounder. It produces Atmos 7.1.4 output from stereo
+' input.
+'
+
+' Base configuration
+Chs: CHANNELS_ATMOS_7_1_4; 16; 44100
+Lay: LAYOUT_ATMOS_7_1_4
+
+' Splitting into stems
+Sep: STEMS_ALL; MODEL_LEGACY
+
+' Channels mixing
+Map: STEMS_PIANO_L; CH_ATMOS_7_1_4_FL; 1
+Map: STEMS_PIANO_R; CH_ATMOS_7_1_4_FR; 1
+Map: STEMS_GUITAR_L; CH_ATMOS_7_1_4_SL; 1
+Map: STEMS_GUITAR_R; CH_ATMOS_7_1_4_SR; 1
+Map: STEMS_BASS_L; CH_ATMOS_7_1_4_BL; 0.8
+Map: STEMS_BASS_R; CH_ATMOS_7_1_4_BR; 0.8
+Map: STEMS_BASS_L; CH_ATMOS_7_1_4_TBL; 0.4
+Map: STEMS_BASS_R; CH_ATMOS_7_1_4_TBR; 0.4
+Map: STEMS_DRUMS_L; CH_ATMOS_7_1_4_BL; 0.6
+Map: STEMS_DRUMS_R; CH_ATMOS_7_1_4_BR; 0.6
+Map: STEMS_DRUMS_L; CH_ATMOS_7_1_4_TBL; 0.2
+Map: STEMS_DRUMS_R; CH_ATMOS_7_1_4_TBR; 0.2
+Map: STEMS_OTHER_L; CH_ATMOS_7_1_4_FL; 1
+Map: STEMS_OTHER_R; CH_ATMOS_7_1_4_FR; 1
+Map: STEMS_VOCALS_L; CH_ATMOS_7_1_4_FC; 0.6
+Map: STEMS_VOCALS_R; CH_ATMOS_7_1_4_FC; 0.6
+Map: STEMS_VOCALS_L; CH_ATMOS_7_1_4_FL; 0.2
+Map: STEMS_VOCALS_R; CH_ATMOS_7_1_4_FR; 0.2
+Map: STEMS_VOCALS_L; CH_ATMOS_7_1_4_TFL; 0.2
+Map: STEMS_VOCALS_R; CH_ATMOS_7_1_4_TFR; 0.2
+
+' Atmos height effects
+Dis: CH_ATMOS_7_1_4_TFL; CH_ATMOS_7_1_4_TFR
+Dis: CH_ATMOS_7_1_4_TBL; CH_ATMOS_7_1_4_TBR
+
+' Low frequency elements
+Map: STEMS_LFE_L; CH_7_1_LFE; 1
+Map: STEMS_LFE_R; CH_7_1_LFE; 1
+
+' WAV output
+' FFmpeg's (E-)AC-3 encoder isn't capable of more than 5.1 so we have to use WAV
+Out: OUTPUT_WAV

@@ -11,12 +11,13 @@ def value_to_constant(value, filter_str=None):
 
     return keys[0]
 
-Version = "0.3.2"
+Version = "1.0.0-rc.1"
 
 Versions = [
     "1.0",
     "1.1",
-    "1.2"
+    "1.2",
+    "1.3"
 ]
 
 Channels = [
@@ -125,6 +126,30 @@ Constants = {
     'LAYOUT_ATMOS_7_1_4': 'FL; FR; FC; LFE; BL; BR; SL; SR; TFL; TFR; TBL; TBR',
     'LAYOUT_ATMOS_11_1_4': 'FL; FR; FC; LFE; BL; BR; FLC; FRC; BC; SL; SR; TBL; TBR',
 
+    # Channels constants
+    'CH_3_0_FL': 0, 'CH_3_0_FR': 1, 'CH_3_0_BC': 2,
+    'CH_3_1_FL': 0, 'CH_3_1_FR': 1, 'CH_3_1_BC': 2, 'CH_3_1_LFE': 3,
+    'CH_4_0_FL': 0, 'CH_4_0_FR': 1, 'CH_4_0_FC': 2, 'CH_4_0_BC': 3,
+    'CH_4_1_FL': 0, 'CH_4_1_FR': 1, 'CH_4_1_FC': 2, 'CH_4_1_LFE': 3, 'CH_4_1_BC': 4,
+    'CH_5_0_FL': 0, 'CH_5_0_FR': 1, 'CH_5_0_FC': 2, 'CH_5_0_BL': 3, 'CH_5_0_BR': 4,
+    'CH_5_1_FL': 0, 'CH_5_1_FR': 1, 'CH_5_1_FC': 2, 'CH_5_1_LFE': 3, 'CH_5_1_BL': 4, 'CH_5_1_BR': 5,
+    'CH_6_0_FL': 0, 'CH_6_0_FR': 1, 'CH_6_0_FC': 2, 'CH_6_0_BC': 3, 'CH_6_0_SL': 4, 'CH_6_0_SR': 5,
+    'CH_6_1_FL': 0, 'CH_6_1_FR': 1, 'CH_6_1_FC': 2, 'CH_6_1_LFE': 3, 'CH_6_1_BC': 4, 'CH_6_1_SL': 5, 'CH_6_1_SR': 6,
+    'CH_7_0_FL': 0, 'CH_7_0_FR': 1, 'CH_7_0_FC': 2, 'CH_7_0_BL': 3, 'CH_7_0_BR': 4, 'CH_7_0_SL': 5, 'CH_7_0_SR': 6,
+    'CH_7_1_FL': 0, 'CH_7_1_FR': 1, 'CH_7_1_FC': 2, 'CH_7_1_LFE': 3, 'CH_7_1_BL': 4, 'CH_7_1_BR': 5, 'CH_7_1_SL': 6, 'CH_7_1_SR': 7,
+    'CH_8_0_FL': 0, 'CH_8_0_FR': 1, 'CH_8_0_FC': 2, 'CH_8_0_BL': 3, 'CH_8_0_BR': 4, 'CH_8_0_BC': 5, 'CH_8_0_SL': 6, 'CH_8_0_SR': 7,
+    'CH_8_1_FL': 0, 'CH_8_1_FR': 1, 'CH_8_1_FC': 2, 'CH_8_1_LFE': 3, 'CH_8_1_BL': 4, 'CH_8_1_BR': 5, 'CH_8_1_BC': 6, 'CH_8_1_SL': 7, 'CH_8_1_SR': 8,
+    'CH_9_0_FL': 0, 'CH_9_0_FR': 1, 'CH_9_0_FC': 2, 'CH_9_0_BL': 3, 'CH_9_0_BR': 4, 'CH_9_0_SL': 5, 'CH_9_0_SR': 6, 'CH_9_0_TFL': 7, 'CH_9_0_TFR': 8,
+    'CH_9_1_FL': 0, 'CH_9_1_FR': 1, 'CH_9_1_FC': 2, 'CH_9_1_LFE': 3, 'CH_9_1_BL': 4, 'CH_9_1_BR': 5, 'CH_9_1_SL': 6, 'CH_9_1_SR': 7, 'CH_9_1_TFL': 8, 'CH_9_1_TFR': 9,
+    'CH_11_0_FL': 0, 'CH_11_0_FR': 1, 'CH_11_0_FC': 2, 'CH_11_0_BL': 3, 'CH_11_0_BR': 4, 'CH_11_0_FLC': 5, 'CH_11_0_FRC': 6, 'CH_11_0_SL': 7, 'CH_11_0_SR': 8, 'CH_11_0_TFL': 9, 'CH_11_0_TFR': 10,
+    'CH_11_1_FL': 0, 'CH_11_1_FR': 1, 'CH_11_1_FC': 2, 'CH_11_1_LFE': 3, 'CH_11_1_BL': 4, 'CH_11_1_BR': 5, 'CH_11_1_FLC': 6, 'CH_11_1_FRC': 7, 'CH_11_1_SL': 8, 'CH_11_1_SR': 9, 'CH_11_1_TFL': 10, 'CH_11_1_TFR': 11,
+    'CH_22_2_FL': 0, 'CH_22_2_FR': 1, 'CH_22_2_FC': 2, 'CH_22_2_LFE': 3, 'CH_22_2_BL': 4, 'CH_22_2_BR': 5, 'CH_22_2_FLC': 6, 'CH_22_2_FRC': 7, 'CH_22_2_BC': 8, 'CH_22_2_SL': 9, 'CH_22_2_SR': 10, 'CH_22_2_TC': 11, 'CH_22_2_TFL': 12, 'CH_22_2_TFC': 13, 'CH_22_2_TFR': 14, 'CH_22_2_TBL': 15, 'CH_22_2_TBC': 16, 'CH_22_2_TBR': 17, 'CH_22_2_LFE2': 18, 'CH_22_2_TSL': 19, 'CH_22_2_TSR': 20, 'CH_22_2_BFC': 21, 'CH_22_2_BFL': 22, 'CH_22_2_BFR': 23,
+    'CH_ATMOS_5_1_2_FL': 0, 'CH_ATMOS_5_1_2_FR': 1, 'CH_ATMOS_5_1_2_FC': 2, 'CH_ATMOS_5_1_2_LFE': 3, 'CH_ATMOS_5_1_2_BL': 4, 'CH_ATMOS_5_1_2_BR': 5, 'CH_ATMOS_5_1_2_TFL': 6, 'CH_ATMOS_5_1_2_TFR': 7,
+    'CH_ATMOS_5_1_4_FL': 0, 'CH_ATMOS_5_1_4_FR': 1, 'CH_ATMOS_5_1_4_FC': 2, 'CH_ATMOS_5_1_4_LFE': 3, 'CH_ATMOS_5_1_4_BL': 4, 'CH_ATMOS_5_1_4_BR': 5, 'CH_ATMOS_5_1_4_TFL': 6, 'CH_ATMOS_5_1_4_TFR': 7, 'CH_ATMOS_5_1_4_TBL': 8, 'CH_ATMOS_5_1_4_TBR': 9,
+    'CH_ATMOS_7_1_2_FL': 0, 'CH_ATMOS_7_1_2_FR': 1, 'CH_ATMOS_7_1_2_FC': 2, 'CH_ATMOS_7_1_2_LFE': 3, 'CH_ATMOS_7_1_2_BL': 4, 'CH_ATMOS_7_1_2_BR': 5, 'CH_ATMOS_7_1_2_SL': 6, 'CH_ATMOS_7_1_2_SR': 7, 'CH_ATMOS_7_1_2_TFL': 8, 'CH_ATMOS_7_1_2_TFR': 9,
+    'CH_ATMOS_7_1_4_FL': 0, 'CH_ATMOS_7_1_4_FR': 1, 'CH_ATMOS_7_1_4_FC': 2, 'CH_ATMOS_7_1_4_LFE': 3, 'CH_ATMOS_7_1_4_BL': 4, 'CH_ATMOS_7_1_4_BR': 5, 'CH_ATMOS_7_1_4_SL': 6, 'CH_ATMOS_7_1_4_SR': 7, 'CH_ATMOS_7_1_4_TFL': 8, 'CH_ATMOS_7_1_4_TFR': 9, 'CH_ATMOS_7_1_4_TBL': 10, 'CH_ATMOS_7_1_4_TBR': 11,
+    'CH_ATMOS_11_1_4_FL': 0, 'CH_ATMOS_11_1_4_FR': 1, 'CH_ATMOS_11_1_4_FC': 2, 'CH_ATMOS_11_1_4_LFE': 3, 'CH_ATMOS_11_1_4_BL': 4, 'CH_ATMOS_11_1_4_BR': 5, 'CH_ATMOS_11_1_4_FLC': 6, 'CH_ATMOS_11_1_4_FRC': 7, 'CH_ATMOS_11_1_4_BC': 8, 'CH_ATMOS_11_1_4_SL': 9, 'CH_ATMOS_11_1_4_SR': 10, 'CH_ATMOS_11_1_4_TBL': 11, 'CH_ATMOS_11_1_4_TBR': 12,
+
     # Stem configurations
     'STEMS_MANUAL': -2,  # Supported for Sep
     'STEMS_SIMPLE': -1,  # Supported for Sep
@@ -158,6 +183,7 @@ Constants = {
     'OUTPUT_EAC3': 3,
     'OUTPUT_AC4': 4,
     'OUTPUT_AAC': 5,
+    'OUTPUT_TRUEHD': 6,
 
     # AI models
     'MODEL_LEGACY': "htdemucs_6s",

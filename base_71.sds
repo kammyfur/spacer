@@ -1,10 +1,10 @@
-%Srdr-1.2
+%Srdr-1.3
 
 '
 ' Surrounder base scene file
 '
-' This is the primary scene file tested during development
-' of Surrounder. It produces 5.1 surround output from stereo
+' This is the secondary scene file tested during development
+' of Surrounder. It produces 7.1 surround output from stereo
 ' input.
 '
 
@@ -15,27 +15,25 @@ Lay: LAYOUT_7_1
 ' Splitting into stems
 Sep: STEMS_ALL; MODEL_LEGACY
 
-' Original version of the song in the front channels
-Map: STEMS_PIANO_L; 0; 1
-Map: STEMS_PIANO_R; 1; 1
-Map: STEMS_GUITAR_L; 6; 1
-Map: STEMS_GUITAR_R; 7; 1
-Map: STEMS_BASS_L; 5; 1.3
-Map: STEMS_BASS_R; 4; 1.3
-Map: STEMS_DRUMS_L; 4; 0.6
-Map: STEMS_DRUMS_R; 5; 0.6
-Map: STEMS_OTHER_L; 0; 1
-Map: STEMS_OTHER_R; 1; 1
-
-' Vocals on the center channel
-Map: STEMS_VOCALS_L; 2; 0.6
-Map: STEMS_VOCALS_R; 2; 0.6
-Map: STEMS_VOCALS_L; 0; 0.2
-Map: STEMS_VOCALS_R; 1; 0.2
+' Channels mixing
+Map: STEMS_PIANO_L; CH_7_1_FL; 1
+Map: STEMS_PIANO_R; CH_7_1_FR; 1
+Map: STEMS_GUITAR_L; CH_7_1_SL; 1
+Map: STEMS_GUITAR_R; CH_7_1_SR; 1
+Map: STEMS_BASS_L; CH_7_1_BL; 1.3
+Map: STEMS_BASS_R; CH_7_1_BR; 1.3
+Map: STEMS_DRUMS_L; CH_7_1_BL; 0.6
+Map: STEMS_DRUMS_R; CH_7_1_BR; 0.6
+Map: STEMS_OTHER_L; CH_7_1_FL; 1
+Map: STEMS_OTHER_R; CH_7_1_FR; 1
+Map: STEMS_VOCALS_L; CH_7_1_FC; 0.6
+Map: STEMS_VOCALS_R; CH_7_1_FC; 0.6
+Map: STEMS_VOCALS_L; CH_7_1_FL; 0.2
+Map: STEMS_VOCALS_R; CH_7_1_FR; 0.2
 
 ' Low frequency elements
-Map: STEMS_LFE_L; 3; 1
-Map: STEMS_LFE_R; 3; 1
+Map: STEMS_LFE_L; CH_7_1_LFE; 1
+Map: STEMS_LFE_R; CH_7_1_LFE; 1
 
 ' FLAC output
 Out: OUTPUT_FLAC

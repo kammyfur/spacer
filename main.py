@@ -7,7 +7,7 @@ import json
 
 parser = argparse.ArgumentParser(
     prog='surrounder',
-    description='Turning stereo music into surround',
+    description='Turning stereo music into surround or Dolby Atmos',
     epilog='Copyright (c) Equestria.dev Developers')
 
 parser.add_argument('input')
@@ -31,6 +31,9 @@ if not os.path.exists(args.scene):
 if args.output is not None and os.path.exists(args.output):
     print(f'Output file {args.output} already exists')
     exit(1)
+
+output = args.output
+input_file = args.input
 
 with open(args.scene, 'r') as f:
     file = f.read()
@@ -184,27 +187,21 @@ for (name, parameters) in operations:
                     print(f"Expected 1 parameter but got {len(parameters)}.")
                     exit(2)
             else:
-                if len(parameters) != 2:
-                    print(f"Expected 2 parameters but got {len(parameters)}.")
+                if len(parameters) < 1:
+                    print(f"Expected at least 1 parameter but got {len(parameters)}.")
                     exit(2)
 
             if not os.path.exists(f"./srdr_work/input.wav"):
                 print(f"Separation is not ready: not configured.")
                 exit(2)
 
-            model = "htdemucs_6s"
-
-            if version != "1.0" and version != "1.1":
-                model = parameters[1]
-
-            print(f"Using model {model}")
-            args = ["--float32", "-n", model, "-o", "./srdr_work/stems_tmp"]
-
             try:
                 stem_format = int(parameters[0])
             except ValueError:
                 print(f"Invalid stem format value: {parameters[0]}")
                 exit(2)
+
+            args = ["--float32", "-n", "htdemucs_6s", "-o", "./srdr_work/stems_tmp"]
 
             if stem_format == -2:
                 if not os.path.exists(f"./stems"):
@@ -214,37 +211,53 @@ for (name, parameters) in operations:
                 shutil.copytree(f"./stems", f"./srdr_work/stems")
             elif stem_format == -1:
                 pass
-            elif stem_format != 0:
+            else:
+                if len(parameters) != 2:
+                    print(f"Expected 2 parameters but got {len(parameters)}.")
+                    exit(2)
+
+                if version != "1.0" and version != "1.1":
+                    args[2] = parameters[1]
+
+                print(f"Using model {args[2]}")
+                args.append("./srdr_work/input.wav")
+
                 match stem_format:
+                    case 0:
+                        pass
                     case 1:
                         print("Isolating vocals")
-                        args += ["--two-stems", "vocals"]
+                        args.append("--two-stems")
+                        args.append("vocals")
                     case 2:
                         print("Isolating bass")
-                        args += ["--two-stems", "bass"]
+                        args.append("--two-stems")
+                        args.append("bass")
                     case 3:
                         print("Isolating piano")
-                        args += ["--two-stems", "piano"]
+                        args.append("--two-stems")
+                        args.append("piano")
                     case 4:
                         print("Isolating guitar")
-                        args += ["--two-stems", "guitar"]
+                        args.append("--two-stems")
+                        args.append("guitar")
                     case 5:
                         print("Isolating drums")
-                        args += ["--two-stems", "drums"]
+                        args.append("--two-stems")
+                        args.append("drums")
                     case 6:
                         print("Isolating other")
-                        args += ["--two-stems", "other"]
+                        args.append("--two-stems")
+                        args.append("other")
                     case _:
                         print(f"Invalid separation configuration: {stem_format}")
                         exit(2)
-
-            args += ["./srdr_work/input.wav"]
 
             if stem_format > -1:
                 import demucs.separate
                 print("Separating using machine learning, this might take a while.")
                 demucs.separate.main(args)
-                os.rename(f"./srdr_work/stems_tmp/{model}/input", "./srdr_work/stems")
+                os.rename(f"./srdr_work/stems_tmp/{args[2]}/input", "./srdr_work/stems")
                 shutil.rmtree('./srdr_work/stems_tmp')
             elif stem_format == -1:
                 os.mkdir("./srdr_work/stems")
@@ -501,6 +514,8 @@ for (name, parameters) in operations:
                 print(f"Invalid output format value: {parameters[0]}")
                 exit(2)
 
+            extra_args = []
+
             match output_format:
                 case 0:  # WAV
                     print("Output format: RIFF WAVE")
@@ -514,27 +529,33 @@ for (name, parameters) in operations:
                 case 2:  # AC-3
                     print("Output format: Dolby AC-3")
                     if channels > 8:
-                        printf(f"Dolby AC-3 only supports up to 8 channels, but {channels} are used.")
+                        print(f"Dolby AC-3 only supports up to 8 channels, but {channels} are used.")
                         exit(2)
                     extension = ".ac3"
                 case 3:  # E-AC-3
                     print("Output format: Dolby E-AC-3")
                     if channels > 16:
-                        printf(f"Dolby E-AC-3 only supports up to 16 channels, but {channels} are used.")
+                        print(f"Dolby E-AC-3 only supports up to 16 channels, but {channels} are used.")
                         exit(2)
                     extension = ".eac3"
                 case 4:  # AC-4
                     print("Output format: Dolby AC-4")
-                    if channels > 16:
-                        printf(f"Dolby AC-4 only supports up to 16 channels, but {channels} are used.")
-                        exit(2)
-                    extension = ".ac4"
-                case 5:  # AC-4
+                    print("Dolby AC-4 is not supported in this version. Please select another codec.")
+                    exit(2)
+                case 5:  # AAC
                     print("Output format: Advanced Audio Coding")
                     if channels > 48:
-                        printf(f"Advanced Audio Coding only supports up to 48 channels, but {channels} are used.")
+                        print(f"Advanced Audio Coding only supports up to 48 channels, but {channels} are used.")
                         exit(2)
-                    extension = ".m4a"
+                    extension = ".aac"
+                case 6:  # TrueHD
+                    print("Output format: Dolby TrueHD")
+                    print("Warning: Dolby TrueHD support is experimental and may cause issues.")
+                    if channels > 15:
+                        print(f"Dolby TrueHD only supports up to 15 channels, but {channels} are used.")
+                        exit(2)
+                    extension = ".thd"
+                    extra_args += ["-strict", "-2"]
                 case _:
                     print(f"Invalid or unsupported output format: {output_format}")
                     exit(2)
@@ -574,8 +595,10 @@ for (name, parameters) in operations:
                 "ffmpeg",
                 "-y",
                 "-i", "./srdr_work/output.wav",
+                *extra_args,
                 f"./srdr_work/final{extension}"
             ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            os.rename(f"./srdr_work/final{extension}", os.path.splitext(input_file)[0] + f"_surrounder{extension}")
         case _:
             print(f"Invalid or unsupported command in this version: {name}")
             exit(2)
