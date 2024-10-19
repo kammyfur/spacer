@@ -528,14 +528,14 @@ for (name, parameters) in operations:
                     extension = ".flac"
                 case 2:  # AC-3
                     print("Output format: Dolby AC-3")
-                    if channels > 8:
-                        print(f"Dolby AC-3 only supports up to 8 channels, but {channels} are used.")
+                    if channels > 6:
+                        print(f"Dolby AC-3 only supports up to 6 channels, but {channels} are used.")
                         exit(2)
                     extension = ".ac3"
                 case 3:  # E-AC-3
                     print("Output format: Dolby E-AC-3")
-                    if channels > 16:
-                        print(f"Dolby E-AC-3 only supports up to 16 channels, but {channels} are used.")
+                    if channels > 6:
+                        print(f"Dolby E-AC-3 only supports up to 6 channels, but {channels} are used.")
                         exit(2)
                     extension = ".eac3"
                 case 4:  # AC-4
