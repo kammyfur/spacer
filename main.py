@@ -6,9 +6,9 @@ import subprocess
 import json
 
 parser = argparse.ArgumentParser(
-    prog='surrounder',
+    prog='spatial-creator',
     description='Turning stereo music into surround or Dolby Atmos',
-    epilog='Copyright (c) Equestria.dev Developers')
+    epilog='Copyright (c) Floofi Systems')
 
 parser.add_argument('input')
 parser.add_argument('scene')
@@ -51,13 +51,13 @@ if not lines[0].startswith("%Srdr-"):
 version = lines[0].split("-")[1]
 
 if version not in Versions:
-    print(f"This version of Surrounder does not support this Scene file. Supported versions: {', '.join(Versions)}")
+    print(f"This version of Spatial Creator does not support this Scene file. Supported versions: {', '.join(Versions)}")
     exit(1)
 
 if Versions.index(version) == len(Versions) - 1:
-    print(f"Surrounder {Version}, using Scene specification version {version} (native)")
+    print(f"Floofi Spatial Creator {Version}, using Scene specification version {version} (native)")
 else:
-    print(f"Surrounder {Version}, using Scene specification version {version} (compatibility)")
+    print(f"Floofi Spatial Creator {Version}, using Scene specification version {version} (compatibility)")
 
 operations = []
 
@@ -598,7 +598,7 @@ for (name, parameters) in operations:
                 *extra_args,
                 f"./srdr_work/final{extension}"
             ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            os.rename(f"./srdr_work/final{extension}", os.path.splitext(input_file)[0] + f"_surrounder{extension}")
+            os.rename(f"./srdr_work/final{extension}", os.path.splitext(input_file)[0] + f"_fsc{extension}")
         case _:
             print(f"Invalid or unsupported command in this version: {name}")
             exit(2)

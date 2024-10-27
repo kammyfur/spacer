@@ -1,10 +1,10 @@
 %Srdr-1.3
 
 '
-' Surrounder Dolby Atmos scene file
+' Spatial Creator Dolby Atmos scene file
 '
 ' This is the scene file tested for Atmos during development
-' of Surrounder. It produces Atmos 7.1.4 output from stereo
+' of Spatial Creator. It produces Atmos 7.1.4 output from stereo
 ' input.
 '
 
