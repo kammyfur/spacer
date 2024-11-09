@@ -1,0 +1,23 @@
+%Srdr-1.4
+
+'
+' Floofi Spatial Creator scene file for Soundstage(TM)
+'
+' This scene file produces a Soundstage(TM)-compliant audio
+' output for an immersive experience that truly feels like being
+' at a concert.
+'
+
+' Base configuration
+Chs: CHANNELS_2_0; 16; 44100
+Lay: LAYOUT_2_0
+
+' We don't separate into stems, just copy for now
+Sep: STEMS_COPY
+
+' Channels mixing
+Map: STEMS_OTHER_L; CH_2_0_FL; 1
+Map: STEMS_OTHER_R; CH_2_0_FR; 1
+
+' FLAC output
+Out: OUTPUT_FLAC; OUTFILT_CONCERT

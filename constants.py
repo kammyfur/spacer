@@ -11,13 +11,14 @@ def value_to_constant(value, filter_str=None):
 
     return keys[0]
 
-Version = "1.0.1"
+Version = "1.1.0"
 
 Versions = [
     "1.0",
     "1.1",
     "1.2",
-    "1.3"
+    "1.3",
+    "1.4"
 ]
 
 Channels = [
@@ -55,6 +56,7 @@ Channels = [
 
 Constants = {
     # Channel configurations
+    'CHANNELS_2_0': 2,
     'CHANNELS_2_1': 3,
     'CHANNELS_2_2': 4,
     'CHANNELS_3_0': 3,
@@ -103,6 +105,7 @@ Constants = {
     'CHANNELS_ATMOS_11_1_8': 20,
 
     # Channel layouts
+    'LAYOUT_2_0': 'FL; FR',
     'LAYOUT_3_0': 'FL; FR; BC',
     'LAYOUT_3_1': 'FL; FR; BC; LFE',
     'LAYOUT_4_0': 'FL; FR; FC; BC',
@@ -127,6 +130,7 @@ Constants = {
     'LAYOUT_ATMOS_11_1_4': 'FL; FR; FC; LFE; BL; BR; FLC; FRC; BC; SL; SR; TBL; TBR',
 
     # Channels constants
+    'CH_2_0_FL': 0, 'CH_2_0_FR': 1,
     'CH_3_0_FL': 0, 'CH_3_0_FR': 1, 'CH_3_0_BC': 2,
     'CH_3_1_FL': 0, 'CH_3_1_FR': 1, 'CH_3_1_BC': 2, 'CH_3_1_LFE': 3,
     'CH_4_0_FL': 0, 'CH_4_0_FR': 1, 'CH_4_0_FC': 2, 'CH_4_0_BC': 3,
@@ -151,6 +155,7 @@ Constants = {
     'CH_ATMOS_11_1_4_FL': 0, 'CH_ATMOS_11_1_4_FR': 1, 'CH_ATMOS_11_1_4_FC': 2, 'CH_ATMOS_11_1_4_LFE': 3, 'CH_ATMOS_11_1_4_BL': 4, 'CH_ATMOS_11_1_4_BR': 5, 'CH_ATMOS_11_1_4_FLC': 6, 'CH_ATMOS_11_1_4_FRC': 7, 'CH_ATMOS_11_1_4_BC': 8, 'CH_ATMOS_11_1_4_SL': 9, 'CH_ATMOS_11_1_4_SR': 10, 'CH_ATMOS_11_1_4_TBL': 11, 'CH_ATMOS_11_1_4_TBR': 12,
 
     # Stem configurations
+    'STEMS_COPY': -3,  # Supported for Sep
     'STEMS_MANUAL': -2,  # Supported for Sep
     'STEMS_SIMPLE': -1,  # Supported for Sep
     'STEMS_ALL': 0,  # Supported for Sep
@@ -194,4 +199,8 @@ Constants = {
     'MODEL_BETTER_MD': "mdx",
     'MODEL_BETTER_SM': "mdx_extra_q",
     'MODEL_BETTER_XS': "mdx_q",
+
+    # Output filters
+    'OUTFILT_NONE': 0,
+    'OUTFILT_CONCERT': 1
 }

@@ -119,9 +119,14 @@ for (name, parameters) in operations:
             try:
                 channels = int(parameters[0])
 
-                if not 2 < channels < 65536:
-                    print(f"Invalid number of channels {channels}, there must be between 3 and 65535 channels.")
+                if version == "1.0" or version == "1.1" or version == "1.2" or version == "1.3":
+                    if not 2 < channels < 65536:
+                        print(f"Invalid number of channels {channels}, there must be between 3 and 65535 channels.")
                     exit(2)
+                else:
+                    if not 1 < channels < 65536:
+                        print(f"Invalid number of channels {channels}, there must be between 2 and 65535 channels.")
+                        exit(2)
 
                 print(f"Channels: {channels}")
             except ValueError:
@@ -209,7 +214,7 @@ for (name, parameters) in operations:
                     exit(2)
 
                 shutil.copytree(f"./stems", f"./srdr_work/stems")
-            elif stem_format == -1:
+            elif stem_format == -1 or (stem_format == -3 and version != "1.0" and version != "1.1" and version != "1.2" and version != "1.3"):
                 pass
             else:
                 if len(parameters) != 2:
@@ -272,6 +277,13 @@ for (name, parameters) in operations:
                     "./srdr_work/stems/vocals.wav",
                     "highpass", "300",
                     "lowpass", "3500"
+                ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            elif stem_format == -3 and version != "1.0" and version != "1.1" and version != "1.2" and version != "1.3":
+                os.mkdir("./srdr_work/stems")
+                subprocess.run([
+                    "ffmpeg",
+                    "-i", "./srdr_work/input.wav",
+                    "./srdr_work/stems/other.wav"
                 ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
             if os.path.exists("./srdr_work/stems/vocals.wav"):
@@ -500,9 +512,22 @@ for (name, parameters) in operations:
 
             print(f"Channel layout: {', '.join(layout)}")
         case "Out":
-            if len(parameters) != 1:
-                print(f"Expected 1 parameter but got {len(parameters)}.")
-                exit(2)
+            output_filter = 0
+
+            if version == "1.0" or version == "1.1" or version == "1.2" or version == "1.3":
+                if len(parameters) != 1:
+                    print(f"Expected 1 parameter but got {len(parameters)}.")
+                    exit(2)
+            else:
+                if len(parameters) != 2:
+                    print(f"Expected 2 parameters but got {len(parameters)}.")
+                    exit(2)
+
+                try:
+                    output_filter = int(parameters[1])
+                except ValueError:
+                    print(f"Invalid output filter: {parameters[1]}")
+                    exit(2)
 
             if not os.path.exists(f"./srdr_work/input.wav"):
                 print(f"Output is not ready: not configured.")
@@ -580,12 +605,30 @@ for (name, parameters) in operations:
                     audio_filter += f"{channel}+"
 
                 audio_filter = audio_filter[:-1]
+
                 subprocess.run([
                     "ffmpeg",
                     "-y",
                     "-i", "./srdr_work/output.wav",
                     "-filter_complex", audio_filter,
                     "./srdr_work/output_2.wav"
+                ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+                os.unlink("./srdr_work/output.wav")
+                os.rename("./srdr_work/output_2.wav", "./srdr_work/output.wav")
+
+            if output_filter == 1:
+                print("Impulse response files are Copyright (C) 2005 Aalto University; <http://legacy.spa.aalto.fi/projects/poririrs/>")
+
+                if channels > 5:
+                    print(f"Warning: Concert filters are optimized for 5 channels or less. You are using {channels} channels, which may affect the final result.")
+
+                subprocess.run([
+                    "ffmpeg",
+                    "-i", f"./srdr_work/output.wav",
+                    "-i", "./ir.wav",
+                    "-lavfi", "afir,volume=50",
+                    f"./srdr_work/output_2.wav"
                 ], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
                 os.unlink("./srdr_work/output.wav")
