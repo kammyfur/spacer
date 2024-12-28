@@ -122,7 +122,7 @@ for (name, parameters) in operations:
                 if version == "1.0" or version == "1.1" or version == "1.2" or version == "1.3":
                     if not 2 < channels < 65536:
                         print(f"Invalid number of channels {channels}, there must be between 3 and 65535 channels.")
-                    exit(2)
+                        exit(2)
                 else:
                     if not 1 < channels < 65536:
                         print(f"Invalid number of channels {channels}, there must be between 2 and 65535 channels.")
