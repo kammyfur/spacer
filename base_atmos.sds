@@ -47,4 +47,4 @@ Map: STEMS_LFE_R; CH_7_1_LFE; 1
 
 ' WAV output
 ' FFmpeg's (E-)AC-3 encoder isn't capable of more than 5.1 so we have to use WAV
-Out: OUTPUT_WAV
+Out: OUTPUT_WAV; OUTFILT_NONE
