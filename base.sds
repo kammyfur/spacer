@@ -1,10 +1,10 @@
 %Srdr-1.4
 
 '
-' Spatial Creator base scene file
+' Spacer base scene file
 '
 ' This is the primary scene file tested during development
-' of Spatial Creator. It produces 5.1 surround output from stereo
+' of Spacer. It produces 5.1 surround output from stereo
 ' input.
 '
 

@@ -6,9 +6,9 @@ import subprocess
 import json
 
 parser = argparse.ArgumentParser(
-    prog='spatial-creator',
+    prog='spacer',
     description='Turning stereo music into surround or Dolby Atmos',
-    epilog='Copyright (c) Floofi Systems')
+    epilog='Copyright (c) Kammy')
 
 parser.add_argument('input')
 parser.add_argument('scene')
@@ -51,13 +51,13 @@ if not lines[0].startswith("%Srdr-"):
 version = lines[0].split("-")[1]
 
 if version not in Versions:
-    print(f"This version of Spatial Creator does not support this Scene file. Supported versions: {', '.join(Versions)}")
+    print(f"This version of Spacer does not support this Scene file. Supported versions: {', '.join(Versions)}")
     exit(1)
 
 if Versions.index(version) == len(Versions) - 1:
-    print(f"Floofi Spatial Creator {Version}, using Scene specification version {version} (native)")
+    print(f"Spacer {Version}, using Scene specification version {version} (native)")
 else:
-    print(f"Floofi Spatial Creator {Version}, using Scene specification version {version} (compatibility)")
+    print(f"Spacer {Version}, using Scene specification version {version} (compatibility)")
 
 operations = []
 

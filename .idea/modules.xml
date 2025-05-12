@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/surrounder.iml" filepath="$PROJECT_DIR$/.idea/surrounder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/spacer.iml" filepath="$PROJECT_DIR$/.idea/spacer.iml" />
     </modules>
   </component>
 </project>
